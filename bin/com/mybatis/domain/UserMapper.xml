@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 所有SQL映射文件中命名空间名不能重复 -->
+<mapper namespace="com.mybatis.domain.UserMapper">
+	<!-- ressultMap标签的使用 id随意但要唯一 -->
+	<resultMap type="com.mybatis.domain.User" id="userMap">
+		<!-- 描述属性和字段的对应关系 为演示，不用都写 -->
+		<id column="name" property="id" />
+		<result column="name" property="userName" />
+		<result column="address" property="address" />
+		<result column="age" property="age" />
+	</resultMap>
+	<select id="selectUserById2" parameterType="int" resultMap="userMap">
+		select * from
+		l_user where id = #{id}
+	</select>
+
+	<!-- map类型 -->
+	<!-- 根据id查询User,返回值为Map类型 -->
+	<select id="selectUserById4Map" parameterType="int" resultType="map">
+		select * from l_user where id = #{id}
+	</select>
+	<!-- 保存一个user，传入参数类型为map -->
+	<insert id="insertUser4Map" parameterType="map">
+		insert into l_user (name, address, age) values(#{name}, #{address}, #{age})
+	</insert>
+
+	<!-- id:当前文件唯一标识 parameterType:当前SQL接收的参数类型 resultType:结果类型(使用全路径) -->
+	<select id="selectUserById" parameterType="int"
+		resultType="com.mybatis.domain.User">
+		select * from l_user where id = #{id}
+	</select>
+
+	<delete id="deleteUserById" parameterType="int">
+		delete from l_user
+		where id = #{id}
+	</delete>
+	<!-- 如果需要返回自增id需要加入useGeneratedKeys="true" keyProperty="id" keyProperty名字为对象的名字 -->
+	<insert id="insertUser" parameterType="com.mybatis.domain.User"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into l_user (name,
+		address,
+		age) values(#{name}, #{address}, #{age})
+	</insert>
+
+	<!-- 这是静态写法 -->
+	<update id="updateUser" parameterType="com.mybatis.domain.User">
+		update l_user set
+		name=#{name}, address=#{address}, age=#{age} where
+		id=#{id}
+	</update>
+
+	<select id="selectAllUser" resultType="com.mybatis.domain.User">
+		select * from l_user
+	</select>
+</mapper>

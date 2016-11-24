@@ -1,0 +1,22 @@
+2016-11-24 16:27:36  [ main:0 ] - [ DEBUG ]  Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2016-11-24 16:27:36  [ main:240 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:27:36  [ main:241 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:27:36  [ main:241 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:27:36  [ main:241 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:27:36  [ main:378 ] - [ DEBUG ]  Opening JDBC Connection
+2016-11-24 16:27:36  [ main:600 ] - [ DEBUG ]  Created connection 805036187.
+2016-11-24 16:27:36  [ main:600 ] - [ DEBUG ]  Setting autocommit to false on JDBC Connection [com.mysql.jdbc.Connection@2ffbe09b]
+2016-11-24 16:27:36  [ main:603 ] - [ DEBUG ]  ==>  Preparing: select * from l_user 
+2016-11-24 16:27:36  [ main:668 ] - [ DEBUG ]  ==> Parameters: 
+2016-11-24 16:27:36  [ main:710 ] - [ DEBUG ]  <==      Total: 7
+2016-11-24 16:30:23  [ main:0 ] - [ DEBUG ]  Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2016-11-24 16:30:23  [ main:236 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:30:23  [ main:236 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:30:23  [ main:236 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:30:23  [ main:237 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:30:23  [ main:364 ] - [ DEBUG ]  Opening JDBC Connection
+2016-11-24 16:30:23  [ main:571 ] - [ DEBUG ]  Created connection 1096218809.
+2016-11-24 16:30:23  [ main:571 ] - [ DEBUG ]  Setting autocommit to false on JDBC Connection [com.mysql.jdbc.Connection@4156f8b9]
+2016-11-24 16:30:23  [ main:574 ] - [ DEBUG ]  ==>  Preparing: select * from l_user 
+2016-11-24 16:30:23  [ main:646 ] - [ DEBUG ]  ==> Parameters: 
+2016-11-24 16:30:23  [ main:685 ] - [ DEBUG ]  <==      Total: 7

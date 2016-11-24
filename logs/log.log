@@ -1,0 +1,68 @@
+2016-11-24 16:41:47  [ main:0 ] - [ DEBUG ]  Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2016-11-24 16:41:47  [ main:191 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:41:47  [ main:192 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:41:47  [ main:192 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:41:47  [ main:193 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:41:47  [ main:315 ] - [ DEBUG ]  Opening JDBC Connection
+2016-11-24 16:41:48  [ main:507 ] - [ DEBUG ]  Created connection 1914204380.
+2016-11-24 16:41:48  [ main:507 ] - [ DEBUG ]  Setting autocommit to false on JDBC Connection [com.mysql.jdbc.Connection@721870dc]
+2016-11-24 16:41:48  [ main:510 ] - [ DEBUG ]  ==>  Preparing: select * from l_user 
+2016-11-24 16:41:48  [ main:583 ] - [ DEBUG ]  ==> Parameters: 
+2016-11-24 16:41:48  [ main:622 ] - [ DEBUG ]  <==      Total: 7
+2016-11-24 16:42:20  [ main:0 ] - [ DEBUG ]  Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2016-11-24 16:42:20  [ main:162 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:42:20  [ main:162 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:42:20  [ main:163 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:42:20  [ main:163 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:42:21  [ main:276 ] - [ DEBUG ]  Opening JDBC Connection
+2016-11-24 16:42:21  [ main:471 ] - [ DEBUG ]  Created connection 980961982.
+2016-11-24 16:42:21  [ main:472 ] - [ DEBUG ]  Setting autocommit to false on JDBC Connection [com.mysql.jdbc.Connection@3a784abe]
+2016-11-24 16:42:21  [ main:475 ] - [ DEBUG ]  ==>  Preparing: select * from l_user 
+2016-11-24 16:42:21  [ main:546 ] - [ DEBUG ]  ==> Parameters: 
+2016-11-24 16:42:21  [ main:585 ] - [ DEBUG ]  <==      Total: 7
+2016-11-24 16:47:27  [ main:0 ] - [ DEBUG ]  Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2016-11-24 16:47:27  [ main:167 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:47:27  [ main:168 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:47:27  [ main:168 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:47:27  [ main:169 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 16:47:27  [ main:285 ] - [ DEBUG ]  Opening JDBC Connection
+2016-11-24 16:47:27  [ main:492 ] - [ DEBUG ]  Created connection 1758972016.
+2016-11-24 16:47:27  [ main:493 ] - [ DEBUG ]  Setting autocommit to false on JDBC Connection [com.mysql.jdbc.Connection@68d7c870]
+2016-11-24 16:47:27  [ main:496 ] - [ DEBUG ]  ==>  Preparing: delete from l_user where id = ? 
+2016-11-24 16:47:27  [ main:577 ] - [ DEBUG ]  ==> Parameters: 3(Integer)
+2016-11-24 16:47:27  [ main:578 ] - [ DEBUG ]  <==    Updates: 1
+2016-11-24 16:47:27  [ main:579 ] - [ DEBUG ]  Committing JDBC Connection [com.mysql.jdbc.Connection@68d7c870]
+2016-11-24 17:25:25  [ main:1 ] - [ DEBUG ]  Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2016-11-24 17:25:26  [ main:222 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:25:26  [ main:223 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:25:26  [ main:223 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:25:26  [ main:223 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:25:26  [ main:368 ] - [ DEBUG ]  Opening JDBC Connection
+2016-11-24 17:25:26  [ main:588 ] - [ DEBUG ]  Created connection 351035934.
+2016-11-24 17:25:26  [ main:588 ] - [ DEBUG ]  Setting autocommit to false on JDBC Connection [com.mysql.jdbc.Connection@14ec621e]
+2016-11-24 17:25:26  [ main:592 ] - [ DEBUG ]  ==>  Preparing: select * from l_user where id = ? 
+2016-11-24 17:25:26  [ main:667 ] - [ DEBUG ]  ==> Parameters: 5(Integer)
+2016-11-24 17:25:26  [ main:722 ] - [ DEBUG ]  <==      Total: 1
+2016-11-24 17:40:47  [ main:0 ] - [ DEBUG ]  Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2016-11-24 17:40:47  [ main:170 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:40:47  [ main:171 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:40:47  [ main:171 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:40:47  [ main:172 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:40:47  [ main:312 ] - [ DEBUG ]  Opening JDBC Connection
+2016-11-24 17:40:47  [ main:528 ] - [ DEBUG ]  Created connection 285660732.
+2016-11-24 17:40:47  [ main:528 ] - [ DEBUG ]  Setting autocommit to false on JDBC Connection [com.mysql.jdbc.Connection@1106d63c]
+2016-11-24 17:40:47  [ main:532 ] - [ DEBUG ]  ==>  Preparing: select * from l_user where id = ? 
+2016-11-24 17:40:48  [ main:616 ] - [ DEBUG ]  ==> Parameters: null
+2016-11-24 17:40:48  [ main:621 ] - [ DEBUG ]  Committing JDBC Connection [com.mysql.jdbc.Connection@1106d63c]
+2016-11-24 17:42:05  [ main:0 ] - [ DEBUG ]  Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2016-11-24 17:42:05  [ main:192 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:42:05  [ main:192 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:42:05  [ main:193 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:42:05  [ main:193 ] - [ DEBUG ]  PooledDataSource forcefully closed/removed all connections.
+2016-11-24 17:42:05  [ main:337 ] - [ DEBUG ]  Opening JDBC Connection
+2016-11-24 17:42:05  [ main:546 ] - [ DEBUG ]  Created connection 895820852.
+2016-11-24 17:42:05  [ main:547 ] - [ DEBUG ]  Setting autocommit to false on JDBC Connection [com.mysql.jdbc.Connection@35652434]
+2016-11-24 17:42:05  [ main:551 ] - [ DEBUG ]  ==>  Preparing: insert into l_user (name, address, age) values(?, ?, ?) 
+2016-11-24 17:42:05  [ main:630 ] - [ DEBUG ]  ==> Parameters: map(String), beijing(String), 1(Integer)
+2016-11-24 17:42:05  [ main:631 ] - [ DEBUG ]  <==    Updates: 1
+2016-11-24 17:42:05  [ main:631 ] - [ DEBUG ]  Committing JDBC Connection [com.mysql.jdbc.Connection@35652434]
