@@ -13,6 +13,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mybatis.domain.Order;
 import com.mybatis.domain.User;
 
 public class MybatisTest {
@@ -123,11 +124,10 @@ public class MybatisTest {
 	}
 
 	/**
-	 * 测试字段引用(抽取字段名)
-	 * 别名测试
+	 * 测试字段引用(抽取字段名) 别名测试
 	 */
 	@Test
-	public void TestSelectFeild() {
+	public void testSelectFeild() {
 		// 从会话工厂中得到一个会话对象
 		SqlSession openSession = sqlSessionFactory.openSession();
 		// UserMapper.xml 中的命名空间名 + 唯一id
@@ -137,17 +137,17 @@ public class MybatisTest {
 			System.out.println(user);
 		}
 	}
-	
+
 	/**
 	 * 根据name进行模糊查询
 	 */
 	@Test
-	public void TestSelectLike() {
+	public void testSelectLike() {
 		// 从会话工厂中得到一个会话对象
 		SqlSession openSession = sqlSessionFactory.openSession();
 		// UserMapper.xml 中的命名空间名 + 唯一id
 		String arg0 = "com.mybatis.domain.UserMapper.selectUserByNameLike";
-		
+
 		User user2 = new User();
 		user2.setName("l");
 		List<User> selectList = openSession.selectList(arg0, user2);
@@ -156,4 +156,17 @@ public class MybatisTest {
 		}
 	}
 
+	/**
+	 * 关联查询 Order
+	 */
+	@Test
+	public void testSelectOrderById() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.OrderMapper.selectOrderById";
+		
+		Order order = openSession.selectOne(arg0, 2);
+		System.out.println(order);
+	}
 }

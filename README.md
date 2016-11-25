@@ -395,6 +395,8 @@ MybatisTest.java
 		}
 	}
 ```
+## 04-关于mybatis的几点说明2
+
 ### 利用sqlMapConfig.xml定义别名
 
 sqlMapConfig.xml
@@ -441,5 +443,210 @@ MybatisTest.java
 		for (User user : selectList) {
 			System.out.println(user);
 		}
+	}
+```
+## 05-关联查询
+### 创建 Order 和 Customer实体类
+  Order.java
+```java
+package com.mybatis.domain;
+/**
+ * 订单
+ * @author onefish
+ *
+ */
+public class Order {
+	private int id;
+	private String orderNumber;
+	private Double priceDouble;
+	
+	private Customer customer;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public Double getPriceDouble() {
+		return priceDouble;
+	}
+
+	public void setPriceDouble(Double priceDouble) {
+		this.priceDouble = priceDouble;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}	
+}
+```
+Customer.java
+```java
+package com.mybatis.domain;
+
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * 客户实体
+ * 
+ * @author onefish
+ * 
+ */
+public class Customer {
+	private int id;
+	private String name;
+	private String address;
+	private Integer age;
+
+	private Set<Order> orders = new HashSet<Order>();
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public Set<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
+	}
+}
+```
+### 创建 Customer 和 Order 表
+
+  Customer
+```sql
+CREATE TABLE `l_customer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nameName` varchar(32) DEFAULT NULL,
+  `address` varchar(128) NOT NULL,
+  `age` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+Order
+```sql
+CREATE TABLE `l_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `orderNumber` varchar(20) DEFAULT NULL,
+  `price` double,
+  `customerId` int, 
+  foreign key(customerId) references l_customer(id),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+### 创建表XML
+
+> 可以将所有配置都写在一个文件里。为了区分方便，写在多个文件
+
+sqlMapConfig.xml
+> 定义别名及映射文件
+
+```xml
+	<!-- 定义Bean别名 位置需在environments之上 -->
+	<typeAliases>
+		<typeAlias type="com.mybatis.domain.User" alias="User" />
+		<typeAlias type="com.mybatis.domain.Order" alias="Order" />
+		<typeAlias type="com.mybatis.domain.Customer" alias="Customer" />
+	</typeAliases>
+	
+	<!-- 注册SQL映射文件 -->
+	<mappers>
+		<mapper resource="com/mybatis/domain/UserMapper.xml" />
+		<mapper resource="com/mybatis/domain/CustomerMapper.xml" />
+		<mapper resource="com/mybatis/domain/OrderMapper.xml" />
+	</mappers>
+```
+OrderMapper.xml
+> 注意字段重名，及字段位置
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 所有SQL映射文件中命名空间名不能重复 -->
+<mapper namespace="com.mybatis.domain.OrderMapper">
+
+	<!-- 根据id查询订单，同时关联查询客户信息 -->
+	<resultMap type="Order" id="orderMap">
+		<id property="id" column="id" />
+		<result property="orderNumber" column="orderNumber" />
+		<result property="price" column="price" />
+		<!-- 用来描述多对一关系 -->
+		<association property="customer" javaType="Customer">
+			<!-- 此处id与order表中的id重复，会取order表中的id值，需在sql中用别名 -->
+			<id property="id" column="cid" />
+			<result property="name" column="userName" />
+			<result property="address" column="address" />
+			<result property="age" column="age" />
+		</association>
+	</resultMap>
+	<select id="selectOrderById" parameterType="int" resultMap="orderMap">
+		<!-- 解决重名问题 表字段有位置问题：如果是c.*, o.* o.id 的值为c.id -->
+		select o.*, c.*, c.id as cid from l_customer as c, l_order as o where
+		o.`customerId` = c.id and o.`id` =#{id}
+	</select>
+</mapper>
+```
+MybatisTest.java
+```java
+	/**
+	 * 关联查询 Order
+	 */
+	@Test
+	public void testSelectOrderById() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.OrderMapper.selectOrderById";
+		
+		Order order = openSession.selectOne(arg0, 2);
+		System.out.println(order);
 	}
 ```
