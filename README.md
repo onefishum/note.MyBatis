@@ -1,5 +1,9 @@
-#MyBatis 学习笔记
-##01-mybatis入门案例
+# MyBatis 学习笔记
+
+[TOC]
+
+## 01-mybatis入门案例
+
 ##02-完成CRUD
 
 >MyBatis 
@@ -650,3 +654,4 @@ MybatisTest.java
 		System.out.println(order);
 	}
 ```
+
