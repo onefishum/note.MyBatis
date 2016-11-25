@@ -58,10 +58,11 @@
 	</select>
 
 	<!-- 关于字段的引用 -->
+	<!-- 定义别名 -->
 	<sql id="userTabAll">
 		id, name, address, age
 	</sql>
-	<select id="selectAllfield" resultType="com.mybatis.domain.User">
+	<select id="selectAllfield" resultType="User">
 		select
 		<include refid="userTabAll" />
 		from l_user

@@ -366,6 +366,7 @@ MybatisTest.java
 	}
 ```
 ### SQL 字段引用
+
 UserMapper.xml
 ```xml
 	<sql id="userTabAll">
@@ -380,7 +381,7 @@ UserMapper.xml
 MybatisTest.java
 ```java
 	/**
-	 * 测试字段引用
+	 * 测试字段引用(抽取字段名)
 	 */
 	@Test
 	public void TestSelectFeild() {
@@ -393,4 +394,22 @@ MybatisTest.java
 			System.out.println(user);
 		}
 	}
+```
+### 利用sqlMapConfig.xml定义别名
+sqlMapConfig.xml
+> 在sqlMapConfig.xml中定义别名时，一定要在environments之上
+
+```xml
+	<!-- 定义Bean别名 位置需在environments之上 -->
+	<typeAliases>
+		<typeAlias type="com.mybatis.domain.User" alias="User" />
+	</typeAliases>
+```
+UserMapper.xml
+```xml
+	<select id="selectAllfield" resultType="User">
+		select
+		<include refid="userTabAll" />
+		from l_user
+	</select>
 ```

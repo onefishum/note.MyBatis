@@ -3,6 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+	<!-- 定义Bean别名 位置需在environments之上 -->
+	<typeAliases>
+		<typeAlias type="com.mybatis.domain.User" alias="User" />
+	</typeAliases>
+
 	<!-- default表明当前默认使用哪个源 -->
 	<environments default="development">
 		<!-- 数据源信息可以配置多个 -->
@@ -16,6 +21,7 @@
 			</dataSource>
 		</environment>
 	</environments>
+
 	<!-- 注册SQL映射文件 -->
 	<mappers>
 		<mapper resource="com/mybatis/domain/UserMapper.xml" />

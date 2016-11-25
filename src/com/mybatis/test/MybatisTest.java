@@ -123,7 +123,8 @@ public class MybatisTest {
 	}
 
 	/**
-	 * 测试字段引用
+	 * 测试字段引用(抽取字段名)
+	 * 别名测试
 	 */
 	@Test
 	public void TestSelectFeild() {
