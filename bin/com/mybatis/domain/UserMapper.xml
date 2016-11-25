@@ -24,7 +24,8 @@
 	</select>
 	<!-- 保存一个user，传入参数类型为map -->
 	<insert id="insertUser4Map" parameterType="map">
-		insert into l_user (name, address, age) values(#{name}, #{address}, #{age})
+		insert into l_user
+		(name, address, age) values(#{name}, #{address}, #{age})
 	</insert>
 
 	<!-- id:当前文件唯一标识 parameterType:当前SQL接收的参数类型 resultType:结果类型(使用全路径) -->
@@ -54,5 +55,15 @@
 
 	<select id="selectAllUser" resultType="com.mybatis.domain.User">
 		select * from l_user
+	</select>
+
+	<!-- 关于字段的引用 -->
+	<sql id="userTabAll">
+		id, name, address, age
+	</sql>
+	<select id="selectAllfield" resultType="com.mybatis.domain.User">
+		select
+		<include refid="userTabAll" />
+		from l_user
 	</select>
 </mapper>

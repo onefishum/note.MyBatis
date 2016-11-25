@@ -28,9 +28,9 @@ public class MybatisTest {
 	@Test
 	public void testSelect() {
 
-		// ´Ó»á»°¹¤³§ÖĞµÃµ½Ò»¸ö»á»°¶ÔÏó
+		// ä»ä¼šè¯å·¥å‚ä¸­å¾—åˆ°ä¸€ä¸ªä¼šè¯å¯¹è±¡
 		SqlSession openSession = sqlSessionFactory.openSession();
-		// UserMapper.xml ÖĞµÄÃüÃû¿Õ¼äÃû + Î¨Ò»id
+		// UserMapper.xml ä¸­çš„å‘½åç©ºé—´å + å”¯ä¸€id
 		String arg0 = "com.mybatis.domain.UserMapper.selectUserById";
 		User user = openSession.selectOne(arg0, 1);
 		System.out.println(user);
@@ -38,50 +38,50 @@ public class MybatisTest {
 
 	@Test
 	public void testDelete() {
-		// ´Ó»á»°¹¤³§ÖĞµÃµ½Ò»¸ö»á»°¶ÔÏó
+		// ä»ä¼šè¯å·¥å‚ä¸­å¾—åˆ°ä¸€ä¸ªä¼šè¯å¯¹è±¡
 		SqlSession openSession = sqlSessionFactory.openSession();
-		// UserMapper.xml ÖĞµÄÃüÃû¿Õ¼äÃû + Î¨Ò»id
+		// UserMapper.xml ä¸­çš„å‘½åç©ºé—´å + å”¯ä¸€id
 		String arg0 = "com.mybatis.domain.UserMapper.deleteUserById";
-		// ÔÚdeleteÀïÄ¬ÈÏÉèÖÃÎªÊÖ¹¤Ìá½»
-		int id = openSession.delete(arg0, 3);
-		// ÊÂÎïÌá½»
+		// åœ¨deleteé‡Œé»˜è®¤è®¾ç½®ä¸ºæ‰‹å·¥æäº¤
+		int id = openSession.delete(arg0, 1);
+		// äº‹ç‰©æäº¤
 		openSession.commit();
-		System.out.println("É¾³ı" + id + "ĞĞ");
+		System.out.println("åˆ é™¤" + id + "è¡Œ");
 	}
 
 	@Test
 	public void testInsert() {
-		// ´Ó»á»°¹¤³§ÖĞµÃµ½Ò»¸ö»á»°¶ÔÏó
+		// ä»ä¼šè¯å·¥å‚ä¸­å¾—åˆ°ä¸€ä¸ªä¼šè¯å¯¹è±¡
 		SqlSession openSession = sqlSessionFactory.openSession();
-		// UserMapper.xml ÖĞµÄÃüÃû¿Õ¼äÃû + Î¨Ò»id
+		// UserMapper.xml ä¸­çš„å‘½åç©ºé—´å + å”¯ä¸€id
 		String arg0 = "com.mybatis.domain.UserMapper.insertUser";
-		// ÔÚdeleteÀïÄ¬ÈÏÉèÖÃÎªÊÖ¹¤Ìá½»
+		// åœ¨deleteé‡Œé»˜è®¤è®¾ç½®ä¸ºæ‰‹å·¥æäº¤
 		User user = new User("onefish", "chaoyang", 40);
 		int id = openSession.insert(arg0, user);
-		// ÊÂÎïÌá½»
+		// äº‹ç‰©æäº¤
 		openSession.commit();
-		System.out.println("²åÈë" + id + "ĞĞ, id:" + user.getId());
+		System.out.println("æ’å…¥" + id + "è¡Œ, id:" + user.getId());
 	}
 
 	@Test
 	public void testUpdate() {
-		// ´Ó»á»°¹¤³§ÖĞµÃµ½Ò»¸ö»á»°¶ÔÏó
+		// ä»ä¼šè¯å·¥å‚ä¸­å¾—åˆ°ä¸€ä¸ªä¼šè¯å¯¹è±¡
 		SqlSession openSession = sqlSessionFactory.openSession();
-		// UserMapper.xml ÖĞµÄÃüÃû¿Õ¼äÃû + Î¨Ò»id
+		// UserMapper.xml ä¸­çš„å‘½åç©ºé—´å + å”¯ä¸€id
 		String arg0 = "com.mybatis.domain.UserMapper.updateUser";
-		// ÔÚdeleteÀïÄ¬ÈÏÉèÖÃÎªÊÖ¹¤Ìá½»
+		// åœ¨deleteé‡Œé»˜è®¤è®¾ç½®ä¸ºæ‰‹å·¥æäº¤
 		User user = new User(1, "lcm", "chengdu", 43);
 		int id = openSession.update(arg0, user);
-		// ÊÂÎïÌá½»
+		// äº‹ç‰©æäº¤
 		openSession.commit();
-		System.out.println("²åÈë" + id + "ĞĞ");
+		System.out.println("æ’å…¥" + id + "è¡Œ");
 	}
 
 	@Test
 	public void testSelectAll() {
-		// ´Ó»á»°¹¤³§ÖĞµÃµ½Ò»¸ö»á»°¶ÔÏó
+		// ä»ä¼šè¯å·¥å‚ä¸­å¾—åˆ°ä¸€ä¸ªä¼šè¯å¯¹è±¡
 		SqlSession openSession = sqlSessionFactory.openSession();
-		// UserMapper.xml ÖĞµÄÃüÃû¿Õ¼äÃû + Î¨Ò»id
+		// UserMapper.xml ä¸­çš„å‘½åç©ºé—´å + å”¯ä¸€id
 		String arg0 = "com.mybatis.domain.UserMapper.selectAllUser";
 
 		List<User> selectList = openSession.selectList(arg0);
@@ -91,35 +91,49 @@ public class MybatisTest {
 	}
 
 	/**
-	 * ¸ù¾İid²éuser,·µ»ØÖµÎªmapÀàĞÍ
+	 * æ ¹æ®idæŸ¥user,è¿”å›å€¼ä¸ºmapç±»å‹
 	 */
 	@Test
 	public void testSelectMap() {
-		// ´Ó»á»°¹¤³§ÖĞµÃµ½Ò»¸ö»á»°¶ÔÏó
+		// ä»ä¼šè¯å·¥å‚ä¸­å¾—åˆ°ä¸€ä¸ªä¼šè¯å¯¹è±¡
 		SqlSession openSession = sqlSessionFactory.openSession();
-		// UserMapper.xml ÖĞµÄÃüÃû¿Õ¼äÃû + Î¨Ò»id
+		// UserMapper.xml ä¸­çš„å‘½åç©ºé—´å + å”¯ä¸€id
 		String arg0 = "com.mybatis.domain.UserMapper.selectUserById4Map";
 		Map<String, Object> selectOne = openSession.selectOne(arg0, 5);
 		System.out.println(selectOne);
 	}
 
 	/**
-	 * ²åÈë£¬Ê¹ÓÃmapÀàĞÍ
+	 * æ’å…¥ï¼Œä½¿ç”¨mapç±»å‹
 	 */
 	@Test
 	public void testInsertMap() {
-		// ´Ó»á»°¹¤³§ÖĞµÃµ½Ò»¸ö»á»°¶ÔÏó
+		// ä»ä¼šè¯å·¥å‚ä¸­å¾—åˆ°ä¸€ä¸ªä¼šè¯å¯¹è±¡
 		SqlSession openSession = sqlSessionFactory.openSession();
-		// UserMapper.xml ÖĞµÄÃüÃû¿Õ¼äÃû + Î¨Ò»id
+		// UserMapper.xml ä¸­çš„å‘½åç©ºé—´å + å”¯ä¸€id
 		String arg0 = "com.mybatis.domain.UserMapper.insertUser4Map";
-		Map<String,Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("name", "map");
 		map.put("address", "beijing");
 		map.put("age", 1);
-		
+
 		openSession.insert(arg0, map);
 		openSession.commit();
 		System.out.print(map);
 	}
 
+	/**
+	 * æµ‹è¯•å­—æ®µå¼•ç”¨
+	 */
+	@Test
+	public void TestSelectFeild() {
+		// ä»ä¼šè¯å·¥å‚ä¸­å¾—åˆ°ä¸€ä¸ªä¼šè¯å¯¹è±¡
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml ä¸­çš„å‘½åç©ºé—´å + å”¯ä¸€id
+		String arg0 = "com.mybatis.domain.UserMapper.selectAllfield";
+		List<User> selectList = openSession.selectList(arg0);
+		for (User user : selectList) {
+			System.out.println(user);
+		}
+	}
 }

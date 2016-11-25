@@ -259,7 +259,6 @@ public class MybatisTest {
 		}
 	}
 }
-
 ```
 
 ## 03-关于mybatis的几点说明
@@ -364,5 +363,34 @@ MybatisTest.java
 		openSession.insert(arg0, map);
 		openSession.commit();
 		System.out.print(map);
+	}
+```
+### SQL 字段引用
+UserMapper.xml
+```xml
+	<sql id="userTabAll">
+		id, name, address, age
+	</sql>
+	<select id="selectAllfield" resultType="com.mybatis.domain.User">
+		select
+		<include refid="userTabAll" />
+		from l_user
+	</select>
+```
+MybatisTest.java
+```java
+	/**
+	 * 测试字段引用
+	 */
+	@Test
+	public void TestSelectFeild() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.selectAllfield";
+		List<User> selectList = openSession.selectList(arg0);
+		for (User user : selectList) {
+			System.out.println(user);
+		}
 	}
 ```
