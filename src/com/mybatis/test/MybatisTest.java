@@ -137,4 +137,23 @@ public class MybatisTest {
 			System.out.println(user);
 		}
 	}
+	
+	/**
+	 * 根据name进行模糊查询
+	 */
+	@Test
+	public void TestSelectLike() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.selectUserByNameLike";
+		
+		User user2 = new User();
+		user2.setName("l");
+		List<User> selectList = openSession.selectList(arg0, user2);
+		for (User user : selectList) {
+			System.out.println(user);
+		}
+	}
+
 }

@@ -396,6 +396,7 @@ MybatisTest.java
 	}
 ```
 ### 利用sqlMapConfig.xml定义别名
+
 sqlMapConfig.xml
 > 在sqlMapConfig.xml中定义别名时，一定要在environments之上
 
@@ -412,4 +413,33 @@ UserMapper.xml
 		<include refid="userTabAll" />
 		from l_user
 	</select>
+```
+### 模糊查询
+UserMapper.xml
+```xml
+	<!-- 模糊查询 parameterType 如果使用string会报错，需使用对象User或map对象-->
+	<select id="selectUserByNameLike" parameterType="User" resultType="User">
+		select <include refid="userTabAll"/>
+		from l_user where name like '%${name}%'
+	</select>
+```
+MybatisTest.java
+```java
+	/**
+	 * 根据name进行模糊查询
+	 */
+	@Test
+	public void TestSelectLike() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.selectUserByNameLike";
+		
+		User user2 = new User();
+		user2.setName("l");
+		List<User> selectList = openSession.selectList(arg0, user2);
+		for (User user : selectList) {
+			System.out.println(user);
+		}
+	}
 ```

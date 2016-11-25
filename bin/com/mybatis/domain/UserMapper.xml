@@ -67,4 +67,10 @@
 		<include refid="userTabAll" />
 		from l_user
 	</select>
+	
+	<!-- 模糊查询 parameterType 如果使用string会报错，需使用对象User或map对象-->
+	<select id="selectUserByNameLike" parameterType="User" resultType="User">
+		select <include refid="userTabAll"/>
+		from l_user where name like '%${name}%'
+	</select>
 </mapper>
