@@ -6,11 +6,12 @@
 
 ##02-完成CRUD
 
->MyBatis 
->https://github.com/mybatis/mybatis-3/releases  下载
->http://blog.mybatis.org/p/products.html 产品
+>MyBatis  
+>https://github.com/mybatis/mybatis-3/releases  下载  
+>http://blog.mybatis.org/p/products.html 产品  
 
-###导入jar包
+### 导入jar包
+
 1. ant-1.9.6.jar
 2. ant-launcher-1.9.6.jar
 3. asm-5.0.4.jar
@@ -390,7 +391,7 @@ MybatisTest.java
 	 * 测试字段引用(抽取字段名)
 	 */
 	@Test
-	public void TestSelectFeild() {
+	public void testSelectFeild() {
 		// 从会话工厂中得到一个会话对象
 		SqlSession openSession = sqlSessionFactory.openSession();
 		// UserMapper.xml 中的命名空间名 + 唯一id
@@ -437,7 +438,7 @@ MybatisTest.java
 	 * 根据name进行模糊查询
 	 */
 	@Test
-	public void TestSelectLike() {
+	public void testSelectLike() {
 		// 从会话工厂中得到一个会话对象
 		SqlSession openSession = sqlSessionFactory.openSession();
 		// UserMapper.xml 中的命名空间名 + 唯一id
@@ -656,4 +657,4 @@ MybatisTest.java
 		System.out.println(order);
 	}
 ```
-
+##06-回顾
