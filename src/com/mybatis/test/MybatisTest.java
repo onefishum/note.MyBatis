@@ -14,6 +14,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
 
 import com.mybatis.domain.Customer;
 import com.mybatis.domain.Order;
@@ -185,5 +186,44 @@ public class MybatisTest {
 
 		Customer customer = openSession.selectOne(arg0, 1);
 		System.out.println(customer);
+	}
+
+	/**
+	 * 动态SQL 查询
+	 */
+	@Test
+	public void testSelectUserCondition() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.selectUserByCondition2";
+
+		User user = new User();
+		user.setName("onefish");
+
+		List<User> user2 = openSession.selectList(arg0, user);
+		System.out.println("MybatisTest.testSelectUserCondition()");
+		for (User user3 : user2) {
+			System.out.println(user3);
+		}
+	}
+
+	/**
+	 * 动态SQL update set语法
+	 */
+	@Test
+	public void testUpdateUserByConition() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.updateUserByConition";
+
+		User user = new User();
+		user.setId(6);
+		user.setAge(35);
+		user.setName("lcm");
+		int id = openSession.update(arg0, user);
+		openSession.commit();
+		System.out.println(id);
 	}
 }

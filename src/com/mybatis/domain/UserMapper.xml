@@ -7,8 +7,8 @@
 	<!-- ressultMap标签的使用 id随意但要唯一 -->
 	<resultMap type="com.mybatis.domain.User" id="userMap">
 		<!-- 描述属性和字段的对应关系 为演示，不用都写 -->
-		<id column="name" property="id" />
-		<result column="name" property="userName" />
+		<id column="id" property="id" />
+		<result column="name" property="name" />
 		<result column="address" property="address" />
 		<result column="age" property="age" />
 	</resultMap>
@@ -67,11 +67,59 @@
 		<include refid="userTabAll" />
 		from l_user
 	</select>
-	
-	<!-- 模糊查询 parameterType 如果使用string会报错，需使用对象User或map对象-->
+
+	<!-- 模糊查询 parameterType 如果使用string会报错，需使用对象User或map对象 -->
 	<!-- #与$的区分：#只是暂位符，而$是真证变量替代，所以要指定具体类型，以便映射 -->
-	<select id="selectUserByNameLike" parameterType="User" resultType="User">
-		select <include refid="userTabAll"/>
+	<select id="selectUserByNameLike" parameterType="User"
+		resultType="User">
+		select
+		<include refid="userTabAll" />
 		from l_user where name like '%${name}%'
 	</select>
+
+	<!-- 动态查询 if -->
+	<select id="selectUserByCondition" parameterType="User"
+		resultMap="userMap">
+		select * from l_user where 1=1
+		<!-- 此处id为属性的id(User.id) -->
+		<if test="id !=null and id != 0">
+			and id = #{id}
+		</if>
+		<if test="name != null">
+			and name = #{name}
+		</if>
+	</select>
+
+	<!-- 动态查询 where -->
+	<select id="selectUserByCondition2" parameterType="User"
+		resultMap="userMap">
+		select * from l_user
+		<where>
+			<!-- 此处id为属性的id(User.id) -->
+			<if test="id !=null and id != 0">
+				and id = #{id}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 动态查询 set -->
+	<update id="updateUserByConition" parameterType="User">
+		update l_user
+		<set>
+			<!-- 此处id为属性的id(User.id) -->
+			<if test="id !=null and id != 0">
+				id = #{id},
+			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="age != 0">
+				age = #{age},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
 </mapper>

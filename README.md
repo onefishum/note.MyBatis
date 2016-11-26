@@ -709,3 +709,130 @@ MybatisTest.java
 		System.out.println(customer);
 	}
 ```
+
+## 08-动态SQL
+### 动态标签if语句
+UserMapper.xml
+```xml
+	<!-- 动态查询 -->
+	<select id="selectUserByCondition" parameterType="User"
+	resultMap="userMap">
+	select * from l_user where 1=1
+		<!-- 此处id为属性的id(User.id) -->
+		<if test="id != 0">
+			and id = #{id}
+		</if>
+		<if test="name != null">
+			and name = #{name}
+		</if>
+	</select>
+```
+MybastisTest.java
+```java
+	/**
+	 * 动态SQL 查询
+	 */
+	@Test
+	public void testSelectUserCondition() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.selectUserByCondition";
+
+		User user = new User();
+		user.setName("onefish");
+		
+		List<User> user2 = openSession.selectList(arg0, user);
+		System.out.println("MybatisTest.testSelectUserCondition()");
+		for (User user3 : user2) {
+			System.out.println(user3);
+		}
+	}
+```
+### 动态标签where语句
+> 会自动处理where语法  
+
+UserMapper.xml
+```xml
+	<!-- 动态查询 where -->
+	<select id="selectUserByCondition2" parameterType="User"
+		resultMap="userMap">
+		select * from l_user
+		<where>
+			<!-- 此处id为属性的id(User.id) -->
+			<if test="id !=null and id != 0">
+				and id = #{id}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+		</where>
+	</select>
+```
+MybastisTest.java
+```java
+	/**
+	 * 动态SQL 查询
+	 */
+	@Test
+	public void testSelectUserCondition() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.selectUserByCondition2";
+
+		User user = new User();
+		user.setName("onefish");
+		
+		List<User> user2 = openSession.selectList(arg0, user);
+		System.out.println("MybatisTest.testSelectUserCondition()");
+		for (User user3 : user2) {
+			System.out.println(user3);
+		}
+	}
+```
+### 动态标签set语句
+> set 要求条件至少要有一个成立  
+
+UserMapper.xml
+```xml
+	<!-- 动态查询 set -->
+	<update id="updateUserByConition" parameterType="User">
+		update l_user
+		<set>
+			<!-- 此处id为属性的id(User.id) -->
+			<if test="id !=null and id != 0">
+				id = #{id},
+			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="age != 0">
+				age = #{age},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+```
+MybastisTest.java
+```java
+	/**
+	 * 动态SQL update set语法
+	 */
+	@Test
+	public void testUpdateUserByConition() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.updateUserByConition";
+
+		User user = new User();
+		user.setId(6);
+		user.setAge(35);
+		user.setName("lcm");
+		int id = openSession.update(arg0, user);
+		openSession.commit();
+		System.out.println(id);
+	}
+```
+## 09-批量操作
