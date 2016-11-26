@@ -664,9 +664,48 @@ MybatisTest.java
 	}
 ```
 ## 07-关联查询2
+### 集合
+CustomerMapper.xml
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 所有SQL映射文件中命名空间名不能重复 -->
+<mapper namespace="com.mybatis.domain.CustomerMapper">
+	<resultMap type="Customer" id="customerMap">
+		<id property="id" column="id" />
+		<result property="name" column="userName" />
+		<result property="address" column="address" />
+		<result property="age" column="age" />
+		<!-- 使用collection来描述集合(一对多) ofType指定集合的类型 -->
+		<collection property="orders" ofType="Order" column="customerId">
+			<id property="id" column="oid" />
+			<result property="orderNumber" column="orderNumber" />
+			<result property="price" column="price" />
+		</collection>
+	</resultMap>
 
+	<select id="selectCustomerById" parameterType="int" resultMap="customerMap">
+		select c.*, o.*, o.id as oid from l_customer c , l_order o where
+		c.id=o.customerId
+		and c.id =#{id}
+	</select>
+</mapper>
+```
+MybatisTest.java
+```java
+	/**
+	 * 关联集合查询 Customer
+	 */
+	@Test
+	public void testSelectCustomerById() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.CustomerMapper.selectCustomerById";
 
-
-
-
-
+		Customer customer = openSession.selectOne(arg0, 1);
+		System.out.println(customer);
+	}
+```

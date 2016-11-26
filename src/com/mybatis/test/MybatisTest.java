@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.lang.model.type.PrimitiveType;
+
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -13,6 +15,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mybatis.domain.Customer;
 import com.mybatis.domain.Order;
 import com.mybatis.domain.User;
 
@@ -165,8 +168,22 @@ public class MybatisTest {
 		SqlSession openSession = sqlSessionFactory.openSession();
 		// UserMapper.xml 中的命名空间名 + 唯一id
 		String arg0 = "com.mybatis.domain.OrderMapper.selectOrderById";
-		
+
 		Order order = openSession.selectOne(arg0, 2);
 		System.out.println(order);
+	}
+
+	/**
+	 * 关联集合查询 Customer
+	 */
+	@Test
+	public void testSelectCustomerById() {
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.CustomerMapper.selectCustomerById";
+
+		Customer customer = openSession.selectOne(arg0, 1);
+		System.out.println(customer);
 	}
 }
