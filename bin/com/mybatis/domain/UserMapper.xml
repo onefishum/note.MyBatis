@@ -69,6 +69,7 @@
 	</select>
 	
 	<!-- 模糊查询 parameterType 如果使用string会报错，需使用对象User或map对象-->
+	<!-- #与$的区分：#只是暂位符，而$是真证变量替代，所以要指定具体类型，以便映射 -->
 	<select id="selectUserByNameLike" parameterType="User" resultType="User">
 		select <include refid="userTabAll"/>
 		from l_user where name like '%${name}%'

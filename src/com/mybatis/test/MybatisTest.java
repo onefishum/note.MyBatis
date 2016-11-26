@@ -68,7 +68,7 @@ public class MybatisTest {
 	public void testUpdate() {
 		// 从会话工厂中得到一个会话对象
 		SqlSession openSession = sqlSessionFactory.openSession();
-		// UserMapper.xml 中的命名空间名 + 唯一id
+		// UserMapper.xml 中的命名空间名 + 唯一id 锁定一个SQL
 		String arg0 = "com.mybatis.domain.UserMapper.updateUser";
 		// 在delete里默认设置为手工提交
 		User user = new User(1, "lcm", "chengdu", 43);

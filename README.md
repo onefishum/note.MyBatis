@@ -206,7 +206,7 @@ public class MybatisTest {
 
 		// 从会话工厂中得到一个会话对象
 		SqlSession openSession = sqlSessionFactory.openSession();
-		// UserMapper.xml 中的命名空间名 + 唯一id
+		// UserMapper.xml 中的命名空间名 + 唯一id 锁定一个SQL
 		String arg0 = "com.mybatis.domain.UserMapper.selectUserById";
 		User user = openSession.selectOne(arg0, 1);
 		System.out.println(user);
@@ -270,7 +270,8 @@ public class MybatisTest {
 
 ## 03-关于mybatis的几点说明
 
-### 显示mybatis的执行sql
+### 显示mybatis的执行sql语句（log4j）
+
   通过配置src/log4j.properties文件，将SQL输出到控制台。(需要debug级别)
 ```ini
 ### set log levels ###
@@ -424,9 +425,14 @@ UserMapper.xml
 	</select>
 ```
 ### 模糊查询
+
+> 对于模糊查询，由于使用get方法(getName)，所以需要实用实体类。(string无 string.getName方法)  
+> \# 与$的区分：#只是暂位符，而$是真证变量替代，所以要指定具体类型，以便映射  
+
 UserMapper.xml
 ```xml
 	<!-- 模糊查询 parameterType 如果使用string会报错，需使用对象User或map对象-->
+	<!-- #与$的区分：#只是暂位符，而$是真证变量替代，所以要指定具体类型，以便映射 -->
 	<select id="selectUserByNameLike" parameterType="User" resultType="User">
 		select <include refid="userTabAll"/>
 		from l_user where name like '%${name}%'
@@ -657,4 +663,10 @@ MybatisTest.java
 		System.out.println(order);
 	}
 ```
-##06-回顾
+## 07-关联查询2
+
+
+
+
+
+
