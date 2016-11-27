@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 所有SQL映射文件中命名空间名不能重复 -->
+<mapper namespace="com.mybatis.domain.OrderMapper">
+
+	<!-- 根据id查询订单，同时关联查询客户信息 -->
+	<resultMap type="Order" id="orderMap">
+		<id property="id" column="id" />
+		<result property="orderNumber" column="orderNumber" />
+		<result property="price" column="price" />
+		<!-- 用来描述多对一关系 -->
+		<association property="customer" javaType="Customer">
+			<!-- 此处id与order表中的id重复，会取order表中的id值，需在sql中用别名 -->
+			<id property="id" column="cid" />
+			<result property="name" column="userName" />
+			<result property="address" column="address" />
+			<result property="age" column="age" />
+		</association>
+	</resultMap>
+	<select id="selectOrderById" parameterType="int" resultMap="orderMap">
+		<!-- 解决重名问题 表字段有位置问题：如果是c.*, o.* o.id 的值为c.id -->
+		select o.*, c.*, c.id as cid from l_customer as c, l_order as o where
+		o.`customerId` = c.id and o.`id` =#{id}
+	</select>
+</mapper>

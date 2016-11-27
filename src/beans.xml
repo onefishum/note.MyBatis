@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop.xsd">
+    
+    <!-- 读取配置文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/> 
+    <!-- 配置数据源 使用c3p0-->
+	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"></bean> -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${driverClass}"/>
+		<property name="jdbcUrl" value="${jdbcUrl}"/>
+		<property name="user" value="${userName}"/>
+		<property name="password" value="${password}"/>
+		<property name="maxPoolSize" value="${maxPoolSize}"/>
+		<property name="minPoolSize" value="${minPoolSize}"/>
+		<property name="initialPoolSize" value="${initPoolSize}"/>	
+	</bean>
+	
+	<!-- 配置Mybatis工厂类 -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+		<!-- 通过setter方法，注入数据源 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 注入mybatis核心配置文件 -->
+		<property name="configLocation" value="classpath:sqlMapConfig.xml"/>
+	</bean>
+	
+	<!-- 配置事物管理器 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!-- 事物通知 -->
+	<tx:advice id="mybatis_advice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" isolation="DEFAULT"/>
+			<tx:method name="delete*" propagation="REQUIRED"/>
+			<tx:method name="update*" propagation="REQUIRED"/>
+			<tx:method name="find*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- aop切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.mybastis.service.*.*(..))" id="mybatis_pointCut"/>
+		<aop:advisor advice-ref="mybatis_advice" pointcut-ref="mybatis_pointCut"/>
+	</aop:config>
+	
+	<!-- 由于没有使用注解，需注入bean -->
+	<bean id="userDao" class="com.mybatis.dao.UserDaoImpl">
+		<!-- 注入父类(SqlSessionDaoSupport)属性 -->
+		<property name="sqlSessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- 注入service -->
+	<bean id="userService" class="com.mybatis.service.UserServiceImpl">
+		<property name="userDao" ref="userDao"/>
+	</bean>
+</beans>
