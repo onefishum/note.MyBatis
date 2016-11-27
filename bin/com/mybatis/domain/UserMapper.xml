@@ -122,4 +122,20 @@
 		</set>
 		where id = #{id}
 	</update>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertManyUser" parameterType="map">
+		insert into l_user(name, address, age) values
+		<foreach collection="users" item="user" separator=",">
+			(#{user.name}, #{user.address}, #{user.age})
+		</foreach>
+	</insert>
+	
+	<!-- 批量查找 -->
+	<select id="selectManyUser" parameterType="map">
+		select * from l_user where id in
+		<foreach collection="ids" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+	</select>
 </mapper>

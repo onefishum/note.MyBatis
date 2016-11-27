@@ -2,6 +2,7 @@ package com.mybatis.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
@@ -38,6 +40,7 @@ public class MybatisTest {
 		// UserMapper.xml 中的命名空间名 + 唯一id
 		String arg0 = "com.mybatis.domain.UserMapper.selectUserById";
 		User user = openSession.selectOne(arg0, 1);
+		openSession.close();
 		System.out.println(user);
 	}
 
@@ -51,6 +54,7 @@ public class MybatisTest {
 		int id = openSession.delete(arg0, 1);
 		// 事物提交
 		openSession.commit();
+		openSession.close();
 		System.out.println("删除" + id + "行");
 	}
 
@@ -65,6 +69,7 @@ public class MybatisTest {
 		int id = openSession.insert(arg0, user);
 		// 事物提交
 		openSession.commit();
+		openSession.close();
 		System.out.println("插入" + id + "行, id:" + user.getId());
 	}
 
@@ -79,6 +84,7 @@ public class MybatisTest {
 		int id = openSession.update(arg0, user);
 		// 事物提交
 		openSession.commit();
+		openSession.close();
 		System.out.println("插入" + id + "行");
 	}
 
@@ -90,6 +96,7 @@ public class MybatisTest {
 		String arg0 = "com.mybatis.domain.UserMapper.selectAllUser";
 
 		List<User> selectList = openSession.selectList(arg0);
+		openSession.close();
 		for (User user : selectList) {
 			System.out.println(user);
 		}
@@ -105,6 +112,7 @@ public class MybatisTest {
 		// UserMapper.xml 中的命名空间名 + 唯一id
 		String arg0 = "com.mybatis.domain.UserMapper.selectUserById4Map";
 		Map<String, Object> selectOne = openSession.selectOne(arg0, 5);
+		openSession.close();
 		System.out.println(selectOne);
 	}
 
@@ -124,6 +132,7 @@ public class MybatisTest {
 
 		openSession.insert(arg0, map);
 		openSession.commit();
+		openSession.close();
 		System.out.print(map);
 	}
 
@@ -137,6 +146,7 @@ public class MybatisTest {
 		// UserMapper.xml 中的命名空间名 + 唯一id
 		String arg0 = "com.mybatis.domain.UserMapper.selectAllfield";
 		List<User> selectList = openSession.selectList(arg0);
+		openSession.close();
 		for (User user : selectList) {
 			System.out.println(user);
 		}
@@ -155,6 +165,7 @@ public class MybatisTest {
 		User user2 = new User();
 		user2.setName("l");
 		List<User> selectList = openSession.selectList(arg0, user2);
+		openSession.close();
 		for (User user : selectList) {
 			System.out.println(user);
 		}
@@ -185,6 +196,7 @@ public class MybatisTest {
 		String arg0 = "com.mybatis.domain.CustomerMapper.selectCustomerById";
 
 		Customer customer = openSession.selectOne(arg0, 1);
+		openSession.close();
 		System.out.println(customer);
 	}
 
@@ -202,6 +214,7 @@ public class MybatisTest {
 		user.setName("onefish");
 
 		List<User> user2 = openSession.selectList(arg0, user);
+		openSession.close();
 		System.out.println("MybatisTest.testSelectUserCondition()");
 		for (User user3 : user2) {
 			System.out.println(user3);
@@ -224,6 +237,36 @@ public class MybatisTest {
 		user.setName("lcm");
 		int id = openSession.update(arg0, user);
 		openSession.commit();
+		openSession.close();
 		System.out.println(id);
+	}
+
+	/**
+	 * 批量插入
+	 */
+	@Test
+	public void testInsertManyUser() {
+		List<User> users = new ArrayList<User>();
+
+		for (int i = 0; i < 3; i++) {
+			User user = new User();
+			user.setName("test" + i);
+			user.setAddress("beijing" + i);
+			user.setAge(40 + i);
+			System.out.println(user);
+			users.add(user);
+		}
+		// 需要使用Map进行包装。
+		Map<String, List<User>> map = new HashMap<String, List<User>>();
+		map.put("users", users);
+		
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.insertManyUser";
+		openSession.insert(arg0, map);
+		openSession.commit();
+		openSession.close();
+		System.out.println(users);
 	}
 }

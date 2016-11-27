@@ -4,11 +4,12 @@
 
 ## 01-mybatis入门案例
 
-##02-完成CRUD
+## 02-完成CRUD
 
->MyBatis  
->https://github.com/mybatis/mybatis-3/releases  下载  
->http://blog.mybatis.org/p/products.html 产品  
+> MyBatis  
+> https://github.com/mybatis/mybatis-3/releases  下载  
+> http://blog.mybatis.org/p/products.html 产品  
+> https://sourceforge.net/projects/aopalliance/ aopalliance 下载
 
 ### 导入jar包
 
@@ -55,7 +56,7 @@ sqlMapConfig.xml
 	</mappers>
 </configuration>
 ```
-###建立一个User类
+### 建立一个User类
 ```java
 package com.mybatis.domain;
 
@@ -836,3 +837,188 @@ MybastisTest.java
 	}
 ```
 ## 09-批量操作
+
+### 批量插入  foreach标签
+UserMapper.xml
+```xml
+	<!-- 批量插入数据 -->
+	<insert id="insertManyUser" parameterType="map">
+		insert into l_user(name, address, age) values
+		<foreach collection="users" item="user" separator=",">
+			(#{user.name}, #{user.address}, #{user.age})
+		</foreach>
+	</insert>
+```
+MybastisTest.java
+```java
+	/**
+	 * 批量插入
+	 */
+	@Test
+	public void testInsertManyUser() {
+		List<User> users = new ArrayList<User>();
+
+		for (int i = 0; i < 3; i++) {
+			User user = new User();
+			user.setName("test" + i);
+			user.setAddress("beijing" + i);
+			user.setAge(40 + i);
+			System.out.println(user);
+			users.add(user);
+		}
+		// 需要使用Map进行包装。
+		Map<String, List<User>> map = new HashMap<String, List<User>>();
+		map.put("users", users);
+		
+		// 从会话工厂中得到一个会话对象
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.insertManyUser";
+		openSession.insert(arg0, map);
+		openSession.commit();
+		openSession.close();
+		System.out.println(users);
+	}
+```
+### foreach 标签 separator、open、close
+> separator：表示分隔符  
+> open：表示在foreach 开始时(不是循环过程中)添加的字符  
+> close：表示在foreach 结束时(不是循环过程中)添加的字符  
+```xml
+	<!-- 批量查找 -->
+	<select id="selectManyUser" parameterType="map">
+		select * from l_user where id in
+		<foreach collection="ids" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+	</select>
+```
+
+## 10-spring整合mybatis1
+### 配置文件
+jdbc.properties
+```properties
+driverClass=com.mysql.jdbc.Driver
+jdbcUrl=jdbc:mysql://localhost:3306/mybatis_01
+userName=root
+password=tom0018
+maxPoolSize=50
+minPoolSize=20
+initPoolSize=20
+```
+### sping配置文件
+beans.xml
+``` xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop.xsd">
+    
+    <!-- 读取配置文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/> 
+    <!-- 配置数据源 使用c3p0-->
+	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"></bean> -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${driverClass}"/>
+		<property name="jdbcUrl" value="${jdbcUrl}"/>
+		<property name="user" value="${userName}"/>
+		<property name="password" value="${password}"/>
+		<property name="maxPoolSize" value="${maxPoolSize}"/>
+		<property name="minPoolSize" value="${minPoolSize}"/>
+		<property name="initialPoolSize" value="${initPoolSize}"></property>	
+	</bean>
+	
+	<!-- 配置Mybatis工厂类 -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+		<!-- 通过setter方法，注入数据源 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 注入mybatis核心配置文件 -->
+		<property name="configLocation" value="classpath:sqlMapConfig.xml"/>
+	</bean>
+	
+	<!-- 配置事物管理器 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!-- 事物通知 -->
+	<tx:advice id="mybatis_advice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" isolation="DEFAULT"/>
+			<tx:method name="delete*" propagation="REQUIRED"/>
+			<tx:method name="update*" propagation="REQUIRED"/>
+			<tx:method name="find*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- aop切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.mybastis.service.*.*(..))" id="mybatis_pointCut"/>
+		<aop:advisor advice-ref="mybatis_advice" pointcut-ref="mybatis_pointCut"/>
+	</aop:config>
+</beans>
+```
+### mybatis配置文件
+sqlMapConfig.xml
+``` xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 定义Bean别名 位置需在environments之上 -->
+	<typeAliases>
+		<typeAlias type="com.mybatis.domain.User" alias="User" />
+		<typeAlias type="com.mybatis.domain.Order" alias="Order" />
+		<typeAlias type="com.mybatis.domain.Customer" alias="Customer" />
+	</typeAliases>
+
+	<!-- 注册SQL映射文件 -->
+	<mappers>
+		<mapper resource="com/mybatis/domain/UserMapper.xml" />
+		<mapper resource="com/mybatis/domain/CustomerMapper.xml" />
+		<mapper resource="com/mybatis/domain/OrderMapper.xml" />
+	</mappers>
+</configuration>
+```
+###  log4j配置文件
+log4j.properties
+``` properties
+ ### set log levels ###
+log4j.rootLogger = debug, stdout, D, E
+
+### 输出到控制台 ##
+log4j.appender.stdout = org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target = System.out
+log4j.appender.stdout.layout = org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern =  %d{ABSOLUTE} %5p %c{1}:%L - %m%n
+
+### 输出到日志文件 ###
+log4j.appender.D = org.apache.log4j.DailyRollingFileAppender
+log4j.appender.D.File = logs/log.log
+log4j.appender.D.Append = true
+## 输出DEBUG级别以上的日志
+log4j.appender.D.Threshold = DEBUG \t
+log4j.appender.D.layout = org.apache.log4j.PatternLayout
+log4j.appender.D.layout.ConversionPattern = %-d{yyyy-MM-dd HH:mm:ss}  [ %t:%r ] - [ %p ]  %m%n
+
+### 保存异常信息到单独文件 ###
+log4j.appender.E = org.apache.log4j.DailyRollingFileAppender
+## 异常日志文件名
+log4j.appender.E.File = logs/error.log \t
+log4j.appender.E.Append = true
+## 只输出ERROR级别以上的日志!!!
+log4j.appender.E.Threshold = ERROR \t
+log4j.appender.E.layout = org.apache.log4j.PatternLayout
+log4j.appender.E.layout.ConversionPattern = %-d{yyyy-MM-dd HH:mm:ss}  [ %t:%r ] - [ %p ]  %m%n
+```
+
