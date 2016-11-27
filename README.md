@@ -1147,3 +1147,53 @@ beans.xml
 		<property name="userDao" ref="userDao"/>
 	</bean>
 ```
+## 12-注解开发mybatis
+> 不建议使用引种方式。失去使用mybatis真正的含义，失去可变动性。
+
+### 建立接口文件
+
+IUserAnnotationDao.java
+``` java
+package com.mybatis.dao;
+
+import org.apache.ibatis.annotations.Select;
+
+import com.mybatis.domain.User;
+
+public interface IUserAnnotationDao {
+	@Select(value="select * from l_user where id=#{id}")
+	public User findUserByIdA(int id);
+}
+```
+
+### 接口配置
+sqlMapConfig.xml
+> 在mapper里增加相关接口  
+
+``` xml
+	<!-- 注册SQL映射文件 -->
+	<mappers>
+		<mapper class="com.mybatis.dao.IUserAnnotationDao"/>
+	</mappers>
+```
+
+### 测试
+``` java
+	/**
+	 * Annotation 实现方法。
+	 * @throws IOException
+	 */
+	@Test
+	public void testSelectUserByIdAn() throws IOException{
+		String resource = "sqlMapConfig.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		
+		SqlSession openSession = sqlSessionFactory.openSession();
+		// 调用getMapper
+		IUserAnnotationDao annotationDao = openSession.getMapper(IUserAnnotationDao.class);
+		User user = annotationDao.findUserByIdA(1);
+		System.out.println(user);
+	}
+```
+

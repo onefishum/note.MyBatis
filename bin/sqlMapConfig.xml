@@ -26,6 +26,7 @@
 
 	<!-- 注册SQL映射文件 -->
 	<mappers>
+		<mapper class="com.mybatis.dao.IUserAnnotationDao"/>
 		<mapper resource="com/mybatis/domain/UserMapper.xml" />
 		<mapper resource="com/mybatis/domain/CustomerMapper.xml" />
 		<mapper resource="com/mybatis/domain/OrderMapper.xml" />
