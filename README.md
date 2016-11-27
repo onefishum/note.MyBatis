@@ -895,7 +895,11 @@ MybastisTest.java
 ```
 
 ## 10-spring整合mybatis1
+### 库文件
+> mybatis-3.4.1.jar 需要 mybatis-spring-1.3.0.jar 库。这个必须对应  
+
 ### 配置文件
+
 jdbc.properties
 ```properties
 driverClass=com.mysql.jdbc.Driver
@@ -1022,3 +1026,124 @@ log4j.appender.E.layout = org.apache.log4j.PatternLayout
 log4j.appender.E.layout.ConversionPattern = %-d{yyyy-MM-dd HH:mm:ss}  [ %t:%r ] - [ %p ]  %m%n
 ```
 
+## 11-spring整合mybatis2
+### 创建Dao
+建立接口文件
+IUserDao.java
+``` java
+package com.mybatis.dao;
+
+import com.mybatis.domain.User;
+
+public interface IUserDao {
+	public int saveUser(User user);
+	public User findUserById(int id);
+}
+```
+建立接口实现文件
+> 在与spring 整合时，spring为mybatis提了SqlSessionDaoSupport父类  
+> 继承后，可以通过 this.getSqlSession(); 直接得到mybatis sqlSession。  
+
+UserDaoImpl.java
+``` java
+package com.mybatis.dao;
+
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+
+import com.mybatis.domain.User;
+
+public class UserDaoImpl extends SqlSessionDaoSupport implements IUserDao{
+
+	@Override
+	/**
+	 * 保存User数据，并返回主键id
+	 */
+	public int saveUser(User user) {
+		// TODO Auto-generated method stub
+		// 从父类中得到SqlSession
+		SqlSession openSession = this.getSqlSession();
+		// UserMapper.xml 中的命名空间名 + 唯一id
+		String arg0 = "com.mybatis.domain.UserMapper.insertUser";
+		// 在delete里默认设置为手工提交
+		int id = openSession.insert(arg0, user);
+		// 事物提交
+		openSession.commit();
+		System.out.println("插入" + id + "行, id:" + user.getId());
+		return user.getId();
+	}
+
+	@Override
+	public User findUserById(int id) {
+		// TODO Auto-generated method stub
+		// 从父类中得到SqlSession
+		SqlSession openSession = this.getSqlSession();
+		String arg0 = "com.mybatis.domain.UserMapper.selectUserById";
+		User user1 = openSession.selectOne(arg0, id);
+		// 在spring下。没有必要再关闭。会由spring进行关闭操作
+		//openSession.close();
+		return user1;
+	}
+}
+```
+### 创建Service
+建立接口文件
+IUserService.java
+``` java
+package com.mybatis.service;
+
+import com.mybatis.domain.User;
+
+public interface IUserService {
+	public int saveUser(User user);
+	public User findUserById(int id);
+}
+```
+建立接口实现文件
+UserServiceImpl.java
+``` java
+package com.mybatis.service;
+
+import com.mybatis.dao.IUserDao;
+import com.mybatis.domain.User;
+
+public class UserServiceImpl implements IUserService {
+	private IUserDao userDao;
+	
+	// 此方法不是必须
+	public IUserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(IUserDao userDao) {
+		this.userDao = userDao;
+	}
+
+	@Override
+	public int saveUser(User user) {
+		// TODO Auto-generated method stub
+		return userDao.saveUser(user);
+	}
+
+	@Override
+	public User findUserById(int id) {
+		// TODO Auto-generated method stub
+		return userDao.findUserById(id);
+	}
+
+}
+```
+
+添加注入到配置
+beans.xml
+``` xml
+	<!-- 由于没有使用注解，需注入bean -->
+	<bean id="userDao" class="com.mybatis.dao.UserDaoImpl">
+		<!-- 注入父类(SqlSessionDaoSupport)属性 -->
+		<property name="sqlSessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- 注入service -->
+	<bean id="userSevice" class="com.mybatis.service.UserServiceImpl">
+		<property name="userDao" ref="userDao"/>
+	</bean>
+```

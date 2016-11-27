@@ -17,6 +17,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.mybatis.domain.Customer;
 import com.mybatis.domain.Order;
