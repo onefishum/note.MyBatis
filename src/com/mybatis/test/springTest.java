@@ -10,8 +10,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
-
 import com.mybatis.dao.IUserAnnotationDao;
 import com.mybatis.domain.User;
 import com.mybatis.service.IUserService;

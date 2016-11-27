@@ -7,19 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.lang.model.type.PrimitiveType;
-
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.mybatis.domain.Customer;
 import com.mybatis.domain.Order;
 import com.mybatis.domain.User;
