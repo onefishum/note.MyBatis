@@ -1148,6 +1148,7 @@ beans.xml
 	</bean>
 ```
 ## 12-注解开发mybatis
+
 > 不建议使用引种方式。失去使用mybatis真正的含义，失去可变动性。
 
 ### 建立接口文件
@@ -1197,3 +1198,45 @@ sqlMapConfig.xml
 	}
 ```
 
+### 14-一级缓存
+> 一级缓存不用配置，系统默认
+> 缓存的是对象的引用  
+> 缓存的生命周期为session的生命周期  
+
+### 15-二级缓存
+sqlMapConfig.xml
+> 二级缓存需要设置  
+> 用于设置二级缓存，总开关。  
+> 一级缓存，缓存的是对象的引用。二级缓存，缓存的是数据(散装数据)  
+
+``` xml
+	<!-- 设置二级缓存，需放到头部 -->
+	<settings>
+		<setting name ="cacheEnabled" value="true"/>
+	</settings>
+```
+UserMapper.xml
+> 二级缓存，需要针对每个表进行设置，通过<cache/> 标签打开。  
+> 如果某条语句不需要cache，可以在其标签设置  useCache="false" 属性  
+> 查询数据，会同时放入1级和2级缓存。  
+> 二级缓存的生命周期是sessionFactory的生命周期。  
+
+``` xml
+	<!-- 开启User表的二级缓存，针对每个表 -->
+	<cache/>
+	
+	<!-- id:当前文件唯一标识 parameterType:当前SQL接收的参数类型 resultType:结果类型(使用全路径)
+		如果此条数据不需要缓存。 加useCache="false"
+	-->
+	<select id="selectUserByIdNoCache" parameterType="int"
+		resultType="com.mybatis.domain.User" useCache="false">
+		select * from l_user where id = #{id}
+	</select>
+```
+User.java
+> 使用2级缓存，必须在对象上开启实例化接口。  
+
+``` java
+public class User implements java.io.Serializable{
+}
+```

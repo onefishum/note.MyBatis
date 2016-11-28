@@ -1,6 +1,8 @@
 package com.mybatis.domain;
 
-public class User {
+import javax.tools.JavaCompiler;
+
+public class User implements java.io.Serializable{
 	private int id;
 	private String name;
 	private String address;

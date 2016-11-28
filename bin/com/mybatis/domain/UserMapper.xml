@@ -4,6 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 所有SQL映射文件中命名空间名不能重复 -->
 <mapper namespace="com.mybatis.domain.UserMapper">
+	<!-- 开启User表的二级缓存，针对每个表 -->
+	<cache/>
 	<!-- ressultMap标签的使用 id随意但要唯一 -->
 	<resultMap type="com.mybatis.domain.User" id="userMap">
 		<!-- 描述属性和字段的对应关系 为演示，不用都写 -->
@@ -137,5 +139,13 @@
 		<foreach collection="ids" item="id" separator="," open="(" close=")">
 			#{id}
 		</foreach>
+	</select>
+	
+	<!-- id:当前文件唯一标识 parameterType:当前SQL接收的参数类型 resultType:结果类型(使用全路径)
+		如果此条数据不需要缓存。 加useCache="false"
+	-->
+	<select id="selectUserByIdNoCache" parameterType="int"
+		resultType="com.mybatis.domain.User" useCache="false">
+		select * from l_user where id = #{id}
 	</select>
 </mapper>
