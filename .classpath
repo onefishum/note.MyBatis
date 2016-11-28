@@ -40,5 +40,7 @@
 	<classpathentry kind="lib" path="lib/spring-webmvc-3.2.0.BUILD-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/spring-webmvc-portlet-3.2.0.BUILD-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/mybatis-spring-1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/ehcache-core-2.6.8.jar"/>
+	<classpathentry kind="lib" path="lib/mybatis-ehcache-1.0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

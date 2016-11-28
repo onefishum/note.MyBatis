@@ -1222,7 +1222,7 @@ UserMapper.xml
 > 二级缓存的生命周期是sessionFactory的生命周期。  
 
 ``` xml
-	<!-- 开启User表的二级缓存，针对每个表 -->
+	<!-- 开启User表的二级缓存，针对每个表,默认使用mybatis自带2级缓存 -->
 	<cache/>
 	
 	<!-- id:当前文件唯一标识 parameterType:当前SQL接收的参数类型 resultType:结果类型(使用全路径)
@@ -1239,4 +1239,55 @@ User.java
 ``` java
 public class User implements java.io.Serializable{
 }
+```
+
+## 16-ehcache缓存
+### 导入包文件
+> ehcache-core-2.6.8.jar  
+> mybatis-ehcache-1.0.3.jar  
+
+### ehcache配置
+> 配置文件可以从ehcache-core-2.6.8.jar包中取得（ehcache-failsafe.xml名字改为ehcache.xml） 
+> ehcache的版本要和mybatis的版本匹配   
+
+ehcache.xml
+``` xml
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config/ehcache.xsd">
+	<!-- 放在系统temp目录 -->
+    <diskStore path="java.io.tmpdir"/>
+	<!-- 也可以自己指定 -->
+	<!-- <diskStore path="/opt/tmp"/> -->
+    <defaultCache
+		<!-- 在内存中缓存多少对象，多余则放在磁盘 -->
+		maxElementsInMemory="10000"
+		<!-- 缓存对象是否永久有效，一但设置了，timeout将不起作用 -->
+		eternal="false"
+		<!-- 仅当element不是永久有效时使用， 可选属性，默认值是0，可闲置时间无穷大 -->
+		<!-- 设置element在失效前的允许闲置时间。 -->
+		timeToIdleSeconds="120"
+		<!-- 仅当element不是永久有效时使用， 可选属性，默认值是0，可闲置时间无穷大 -->
+		<!-- 设置Element 在失效前允许存活时间，最大时间介于创建时间和失效时间之间。 -->
+		timeToLiveSeconds="120"
+		<!-- 磁盘中最大缓存对象数。若是0表示无穷大 -->
+		maxElementsOnDisk="10000000"
+		<!-- overflowToDisk 配置此属性，当mwdhb中Element数量达到maxElementsInMemory时
+		Echcahe将会Element写到磁盘中 -->
+		<!-- dispSpoolBufferSizeMB 这个参数设置DiskStore的缓存区大小，默认是30MB。
+		每个cache都应该有自己的一个缓冲区。 --> 
+		<!-- diskPersistent 是否在重启服务时，清除磁盘上的缓存数据，true不清除 -->
+		<!-- 磁盘失效线程运行时间间隔 -->
+		diskExpiryThreadIntervalSeconds="120"
+		<!-- 当达到maxElementsInMemory限制时，Ehcache将会根据指定的策略去清内存。
+		默认策略是LRU（最近最少使用）、FIFO、LFU -->
+		memoryStoreEvictionPolicy="LRU">
+        <persistence strategy="localTempSwap"/>
+    </defaultCache>
+</ehcache>
+```
+UserMapper.xml
+``` xml
+<!-- 开启User表的二级缓存，针对每个表,默认使用mybatis自带2级缓存 -->
+	<!-- <cache/> -->
+	<!-- 也可以指定第三方如：ehcache -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
 ```

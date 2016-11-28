@@ -4,8 +4,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 所有SQL映射文件中命名空间名不能重复 -->
 <mapper namespace="com.mybatis.domain.UserMapper">
-	<!-- 开启User表的二级缓存，针对每个表 -->
-	<cache/>
+	<!-- 开启User表的二级缓存，针对每个表,默认使用mybatis自带2级缓存 -->
+	<!-- <cache/> -->
+	<!-- 也可以指定第三方如：ehcache -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
 	<!-- ressultMap标签的使用 id随意但要唯一 -->
 	<resultMap type="com.mybatis.domain.User" id="userMap">
 		<!-- 描述属性和字段的对应关系 为演示，不用都写 -->
