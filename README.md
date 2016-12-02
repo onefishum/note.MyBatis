@@ -686,7 +686,19 @@ CustomerMapper.xml
 			<result property="price" column="price" />
 		</collection>
 	</resultMap>
+ 
 
+<!-- 
+	# 也可以简写成
+  	<mapper namespace="com.mybatis.domain.CustomerMapper">
+   	<resultMap type="Customer" id="customerMap">
+   		<collection property="orders" ofType="Order" column="customerId" extend="customerMap">
+			<id property="id" column="oid" />
+			<result property="orderNumber" column="orderNumber" />
+			<result property="price" column="price" />
+		</collection>
+	</resultMap>
+-->
 	<select id="selectCustomerById" parameterType="int" resultMap="customerMap">
 		select c.*, o.*, o.id as oid from l_customer c , l_order o where
 		c.id=o.customerId
@@ -884,6 +896,7 @@ MybastisTest.java
 > separator：表示分隔符  
 > open：表示在foreach 开始时(不是循环过程中)添加的字符  
 > close：表示在foreach 结束时(不是循环过程中)添加的字符  
+
 ```xml
 	<!-- 批量查找 -->
 	<select id="selectManyUser" parameterType="map">
@@ -895,12 +908,16 @@ MybastisTest.java
 ```
 
 ## 10-spring整合mybatis1
+
 ### 库文件
+
 > mybatis-3.4.1.jar 需要 mybatis-spring-1.3.0.jar 库。这个必须对应  
+>
 
 ### 配置文件
 
 jdbc.properties
+
 ```properties
 driverClass=com.mysql.jdbc.Driver
 jdbcUrl=jdbc:mysql://localhost:3306/mybatis_01
@@ -910,9 +927,13 @@ maxPoolSize=50
 minPoolSize=20
 initPoolSize=20
 ```
+
 ### sping配置文件
-beans.xml
-``` xml
+
+beans.xml  
+
+
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
@@ -971,9 +992,10 @@ beans.xml
 	</aop:config>
 </beans>
 ```
+
 ### mybatis配置文件
 sqlMapConfig.xml
-``` xml
+```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
@@ -996,7 +1018,7 @@ sqlMapConfig.xml
 ```
 ###  log4j配置文件
 log4j.properties
-``` properties
+```properties
  ### set log levels ###
 log4j.rootLogger = debug, stdout, D, E
 
@@ -1030,7 +1052,7 @@ log4j.appender.E.layout.ConversionPattern = %-d{yyyy-MM-dd HH:mm:ss}  [ %t:%r ] 
 ### 创建Dao
 建立接口文件
 IUserDao.java
-``` java
+```java
 package com.mybatis.dao;
 
 import com.mybatis.domain.User;
@@ -1045,7 +1067,7 @@ public interface IUserDao {
 > 继承后，可以通过 this.getSqlSession(); 直接得到mybatis sqlSession。  
 
 UserDaoImpl.java
-``` java
+```java
 package com.mybatis.dao;
 
 import org.apache.ibatis.session.SqlSession;
@@ -1089,7 +1111,7 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements IUserDao{
 ### 创建Service
 建立接口文件
 IUserService.java
-``` java
+```java
 package com.mybatis.service;
 
 import com.mybatis.domain.User;
@@ -1101,7 +1123,7 @@ public interface IUserService {
 ```
 建立接口实现文件
 UserServiceImpl.java
-``` java
+```java
 package com.mybatis.service;
 
 import com.mybatis.dao.IUserDao;
@@ -1136,7 +1158,7 @@ public class UserServiceImpl implements IUserService {
 
 添加注入到配置
 beans.xml
-``` xml
+```xml
 	<!-- 由于没有使用注解，需注入bean -->
 	<bean id="userDao" class="com.mybatis.dao.UserDaoImpl">
 		<!-- 注入父类(SqlSessionDaoSupport)属性 -->
@@ -1154,7 +1176,7 @@ beans.xml
 ### 建立接口文件
 
 IUserAnnotationDao.java
-``` java
+```java
 package com.mybatis.dao;
 
 import org.apache.ibatis.annotations.Select;
@@ -1171,7 +1193,7 @@ public interface IUserAnnotationDao {
 sqlMapConfig.xml
 > 在mapper里增加相关接口  
 
-``` xml
+```xml
 	<!-- 注册SQL映射文件 -->
 	<mappers>
 		<mapper class="com.mybatis.dao.IUserAnnotationDao"/>
@@ -1179,7 +1201,7 @@ sqlMapConfig.xml
 ```
 
 ### 测试
-``` java
+```java
 	/**
 	 * Annotation 实现方法。
 	 * @throws IOException
@@ -1209,7 +1231,7 @@ sqlMapConfig.xml
 > 用于设置二级缓存，总开关。  
 > 一级缓存，缓存的是对象的引用。二级缓存，缓存的是数据(散装数据)  
 
-``` xml
+```xml
 	<!-- 设置二级缓存，需放到头部 -->
 	<settings>
 		<setting name ="cacheEnabled" value="true"/>
@@ -1221,7 +1243,7 @@ UserMapper.xml
 > 查询数据，会同时放入1级和2级缓存。  
 > 二级缓存的生命周期是sessionFactory的生命周期。  
 
-``` xml
+```xml
 	<!-- 开启User表的二级缓存，针对每个表,默认使用mybatis自带2级缓存 -->
 	<cache/>
 	
@@ -1236,7 +1258,7 @@ UserMapper.xml
 User.java
 > 使用2级缓存，必须在对象上开启实例化接口。  
 
-``` java
+```java
 public class User implements java.io.Serializable{
 }
 ```
@@ -1251,7 +1273,7 @@ public class User implements java.io.Serializable{
 > ehcache的版本要和mybatis的版本匹配   
 
 ehcache.xml
-``` xml
+```xml
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config/ehcache.xsd">
 	<!-- 放在系统temp目录 -->
     <diskStore path="java.io.tmpdir"/>
@@ -1285,7 +1307,7 @@ ehcache.xml
 </ehcache>
 ```
 UserMapper.xml
-``` xml
+```xml
 <!-- 开启User表的二级缓存，针对每个表,默认使用mybatis自带2级缓存 -->
 	<!-- <cache/> -->
 	<!-- 也可以指定第三方如：ehcache -->
